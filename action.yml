@@ -25,7 +25,6 @@ outputs:
     description: 'The latest version available'
 
 runs:
-  using: bash
   pre: ./check.sh
-  main: ./outdated.sh  
+  main: ./outdated.sh
   

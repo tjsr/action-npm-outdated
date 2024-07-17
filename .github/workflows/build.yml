@@ -20,7 +20,7 @@ jobs:
         # Defaults to the user or organization that owns the workflow file
         scope: '@tjsr'
 
-    - uses: tjsr/action-npm-outdated@main
+    - uses: tjsr/action-npm-outdated@action-test
       with:
         token: ${{ secrets.GITHUB_TOKEN }}
         setup-npm: true
