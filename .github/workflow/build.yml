@@ -1,0 +1,31 @@
+name: Test the outdated action
+run-name: ${{ github.actor }} Running action_npm_outdated test.
+on: [push, workflow_dispatch] 
+jobs:
+  test-action:
+    runs-on: ubuntu-latest
+    env:
+      DOCKER_BUILDKIT: 1
+      BUILDKIT_PROGRESS: plain
+
+    steps:
+    - name: Check out repository code
+      uses: actions/checkout@v4
+
+    # Setup .npmrc file to publish to GitHub Packages
+    - uses: actions/setup-node@v4
+      with:
+        node-version: 20.15.1
+        registry-url: 'https://npm.pkg.github.com'
+        # Defaults to the user or organization that owns the workflow file
+        scope: '@tjsr'
+
+    - uses: tjsr/action_npm_outdated@main
+      with:
+        token: ${{ secrets.GITHUB_TOKEN }}
+        setup-npm: true
+        dependencies: 'rimraf'
+        project: 'action-npm-outdated'
+    
+    - name: Output the updated version
+      run: echo "The updated version is ${{ steps.action_npm_outdated.outputs.latestVersion }}"
