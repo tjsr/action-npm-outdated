@@ -28,5 +28,7 @@ runs:
   using: 'composite'
   steps:
   - name: Run action-npm-outdated
+    id: action-npm-outdated
+    shell: bash
     run: |
-    ./outdated.sh
+      ./outdated.sh
