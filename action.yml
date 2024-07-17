@@ -25,6 +25,7 @@ outputs:
     description: 'The latest version available'
 
 runs:
+  using: 'composite'
   pre: ./check.sh
   main: ./outdated.sh
   
