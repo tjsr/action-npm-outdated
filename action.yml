@@ -30,5 +30,7 @@ runs:
   - name: Run action-npm-outdated
     id: action-npm-outdated
     shell: bash
-    run: |
-      ./outdated.sh
+    env: 
+      INPUT_DEPENDENCY: ${{ inputs.dependency }}
+      INPUT_PROJECT: ${{ inputs.project }}
+    run: ./outdated.sh
