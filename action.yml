@@ -10,8 +10,8 @@ inputs:
     description: Generate an .npmrc file to authenticate with the npm registry
     required: false
     default: false
-  dependencies:
-    description: 'Dependencies to check'
+  dependency:
+    description: 'Dependency to check'
     required: false
   project:
     description: 'The target project name that must be the owner of the package'

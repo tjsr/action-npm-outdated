@@ -21,7 +21,7 @@ jobs:
         scope: '@tjsr'
 
     - uses: ./
-      id: action-npm-oudated
+      id: action-npm-outdated
       with:
         token: ${{ secrets.GITHUB_TOKEN }}
         setup-npm: true
@@ -29,4 +29,4 @@ jobs:
         project: 'action-npm-outdated'
     
     - name: Output the updated version
-      run: echo "The updated version is ${{ steps.action-npm-oudated.outputs.latestVersion }}"
+      run: echo "The updated version is ${{ steps.action-npm-outdated.outputs.latestVersion }}"
