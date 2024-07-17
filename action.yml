@@ -27,7 +27,9 @@ outputs:
 runs:
   using: 'composite'
   steps:
-    run: ./outdated.sh
+  - name: Run action-npm-outdated
+    run: |
+    ./outdated.sh
 
   # main: ./outdated.sh
   # pre: ./check.sh
