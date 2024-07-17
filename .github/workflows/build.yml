@@ -25,7 +25,7 @@ jobs:
       with:
         token: ${{ secrets.GITHUB_TOKEN }}
         setup-npm: true
-        dependencies: 'rimraf'
+        dependency: 'rimraf'
         project: 'action-npm-outdated'
     
     - name: Output the updated version
