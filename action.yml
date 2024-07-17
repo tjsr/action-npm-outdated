@@ -30,7 +30,3 @@ runs:
   - name: Run action-npm-outdated
     run: |
     ./outdated.sh
-
-  # main: ./outdated.sh
-  # pre: ./check.sh
-  
