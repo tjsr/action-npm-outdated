@@ -24,7 +24,10 @@ echo "Checking $PACKAGE"
 if [ -z "$OUTDATED" ] || [ "$OUTDATED" = "{}" ]; then
   echo "No new version found for $PACKAGE"
   echo "hasNewVersion=false" >> "$GITHUB_OUTPUT"
-  exit 1
+  if [ "$INPUT_FAIL_ON_NO_NEW_VERSION" = "true" ]; then
+    exit 1
+  fi
+  exit 0
 fi
 
 PACKAGE_OUTDATED=$(echo "$OUTDATED" | jq -r --arg package "$PACKAGE" '

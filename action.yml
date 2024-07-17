@@ -16,6 +16,9 @@ inputs:
   project:
     description: 'The target project name that must be the owner of the package'
     required: true
+  failOnNoNewVersion: 'Whether the build should fail with an exit code if no new version is available for the specified package'
+    required: false
+    default: false
 outputs:
   hasNewVersion:
     description: 'Whether or not there is a new version'
@@ -28,9 +31,10 @@ runs:
   using: 'composite'
   steps:
   - name: Run action-npm-outdated
-    id: action-npm-outdated
-    shell: bash
     env: 
       INPUT_DEPENDENCY: ${{ inputs.dependency }}
       INPUT_PROJECT: ${{ inputs.project }}
+      INPUT_FAIL_ON_NO_NEW_VERSION: ${{ inputs.failOnNoNewVersion }}
+    id: action-npm-outdated
+    shell: bash
     run: ./outdated.sh
