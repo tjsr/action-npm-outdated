@@ -1,0 +1,31 @@
+name: '@tjsr/action-npm-outdated'
+description: Check for outdated npm packages
+author: Tim Rowe <tim@tjsr.id.au>
+inputs:
+  token:
+    description: 'GitHub token'
+    required: false
+    default: ${{ github.token }}
+  setup-npm:
+    description: Generate an .npmrc file to authenticate with the npm registry
+    required: false
+    default: false
+  dependencies:
+    description: 'Dependencies to check'
+    required: false
+  project:
+    description: 'The target project name that must be the owner of the package'
+    required: true
+outputs:
+  hasNewVersion:
+    description: 'Whether or not there is a new version'
+  wantedVersion:
+    description: 'The version wanted by the package'
+  latestVersion:
+    description: 'The latest version available'
+
+runs:
+  using: bash
+  pre: ./check.sh
+  main: ./outdated.sh  
+  
