@@ -26,6 +26,9 @@ outputs:
 
 runs:
   using: 'composite'
-  pre: ./check.sh
-  main: ./outdated.sh
+  steps:
+    run: ./outdated.sh
+
+  # main: ./outdated.sh
+  # pre: ./check.sh
   
