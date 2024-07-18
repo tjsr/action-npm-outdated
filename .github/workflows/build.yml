@@ -34,4 +34,4 @@ jobs:
         OUTPUT: ${{ fromJson(steps.outdated.outputs) }}
       run: |
         echo "Output data: $OUTPUT"
-        echo "The updated version is ${{ steps.outdated.outputs.latestVersion }}"
+        echo "The updated version is ${{ steps.outdated.outputs.latest }}"

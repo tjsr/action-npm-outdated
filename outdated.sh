@@ -4,7 +4,10 @@ set +e
 if [ -z "$INPUT_DEPENDENCY" ]; then
     echo "'dependency' must be provided"
     exit 1
-fi  
+else
+ # To-do - check input_dep or package as input.
+  PACKAGE=$INPUT_DEPENDENCY
+fi
 
 if [ -z "$INPUT_PROJECT" ]; then
     echo "'project' must be provided"
@@ -20,11 +23,9 @@ if [ "$INPUT_SKIP_NPM_CI_EXECUTE" == "false" ]; then
   npm ci
 fi
 
-PACKAGE=$INPUT_DEPENDENCY
 OUTDATED=`npm outdated --json --all $PACKAGE`
 
-echo "OUTDATED: $OUTDATED"
-echo "Checking $PACKAGE"
+echo "Checking for updated versions of $PACKAGE on $INPUT_PROJECT"
 
 if [ -z "$OUTDATED" ] || [ "$OUTDATED" = "{}" ]; then
   echo "No new version found for $PACKAGE"
@@ -55,14 +56,16 @@ DEPENDENT_DATA=$(echo $PACKAGE_OUTDATED | jq -r --arg project "$INPUT_PROJECT" '
   .[] | select(.dependent == $project) | .hasNewVersion = (.current != .latest)
 ')
 
-if [ -z "$LATEST_VERSION" ]; then
+echo $DEPENDENT_DATA >> "$GITHUB_OUTPUT"
+if [ "$(echo $DEPENDENT_DATA | jq -r .hasNewVersion)" != "true" ]; then
   echo "No new version found for $PACKAGE"
-  echo "hasNewVersion=false" >> "$GITHUB_OUTPUT"
-  exit 1
+    if [ "$INPUT_FAIL_ON_NO_NEW_VERSION" = "true" ]; then
+    exit 1
+  fi
+  exit 0
 fi
 
 echo "Package $PACKAGE@$(echo $DEPENDENT_DATA | jq -r .current) wants $(echo $DEPENDENT_DATA | jq -r .wanted) with $(echo $DEPENDENT_DATA | jq -r .latest) latest available."
-echo $DEPENDENT_DATA >> "$GITHUB_OUTPUT"
 
 # echo "hasNewVersion=true" >> "$GITHUB_OUTPUT"
 # echo "wantedVersion=$WANTED_VERSION" >> "$GITHUB_OUTPUT"

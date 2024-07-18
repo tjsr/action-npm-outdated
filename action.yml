@@ -25,13 +25,13 @@ inputs:
     required: false
     default: true
 outputs:
-  currentVersion:
+  current:
     description: 'The current version used by the package'
   hasNewVersion:
     description: 'Whether or not there is a new version'
-  latestVersion:
+  latest:
     description: 'The latest version available'
-  wantedVersion:
+  wanted:
     description: 'The version wanted by the package'
 
 runs:
