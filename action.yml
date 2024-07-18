@@ -27,14 +27,19 @@ inputs:
 outputs:
   current:
     description: 'The current version used by the package'
+    value: ${{ steps.action-npm-outdated.outputs.current }}
   hasNewVersion:
     description: 'Whether or not there is a new version'
+    value: ${{ steps.action-npm-outdated.outputs.hasNewVersion }}
   latest:
     description: 'The latest version available'
+    value: ${{ steps.action-npm-outdated.outputs.latest }}
   wanted:
     description: 'The version wanted by the package'
+    value: ${{ steps.action-npm-outdated.outputs.wanted }}
   dependent:
     description: 'The dependent package name - should be the same as the project input value'
+    value: ${{ steps.action-npm-outdated.outputs.dependent }}
 
 runs:
   using: 'composite'

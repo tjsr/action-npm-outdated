@@ -3,7 +3,7 @@ set +e
 
 if [ -z "$1" ]; then
   OUTPUT_FILE=/tmp/outdated.tmp.json
-  echo Output file param was not specified at $$1, outputting to $OUTPUT_FILE
+  echo Output file param was not specified at \$1, outputting to $OUTPUT_FILE
 else
   OUTPUT_FILE=$1
 fi
