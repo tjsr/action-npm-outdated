@@ -10,7 +10,7 @@ if [ -z "$1" ]; then
     echo Output file param was not specified at \$1 and GITHUB_OUTPUT not present, outputting to $OUTPUT_TARGET
   fi
 else
-  OUTPUT_FILE=$1
+  OUTPUT_TARGET=$1
 fi
 
 if [ -z "$INPUT_DEPENDENCY" ]; then
@@ -64,7 +64,7 @@ DEPENDENT_DATA=$(echo $PACKAGE_OUTDATED | jq -c -r --arg project "$INPUT_PROJECT
   .[] | select(.dependent == $project) | .hasNewVersion = (.current != .latest)
 ')
 
-echo "$DEPENDENT_DATA" | jq -r 'to_entries[] | "\(.key)=\(.value)"' >> "$OUTPUT_FILE"
+echo "$DEPENDENT_DATA" | jq -r 'to_entries[] | "\(.key)=\(.value)"' >> "$OUTPUT_TARGET"
 if [ "$(echo $DEPENDENT_DATA | jq -r .hasNewVersion)" != "true" ]; then
   echo "No new version found for $PACKAGE"
   if [ "$INPUT_FAIL_ON_NO_NEW_VERSION" = "true" ]; then
