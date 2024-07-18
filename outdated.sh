@@ -19,7 +19,7 @@ fi
 PACKAGE=$INPUT_DEPENDENCY
 OUTDATED=`npm outdated --json --all $PACKAGE`
 
-echo "OUTDATED: "$OUTDATED"
+echo "OUTDATED: $OUTDATED"
 echo "Checking $PACKAGE"
 
 if [ -z "$OUTDATED" ] || [ "$OUTDATED" = "{}" ]; then
