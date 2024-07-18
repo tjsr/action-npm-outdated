@@ -31,4 +31,8 @@ jobs:
     
     - name: Output the updated version
       run: |
+        if [ -z "${{ steps.outdated.outputs.latest }}" ]; then
+          echo "outputs.latest is empty"
+          exit 1
+        fi
         echo "The updated version is ${{ steps.outdated.outputs.latest }}"
