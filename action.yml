@@ -44,9 +44,7 @@ outputs:
 runs:
   using: 'composite'
   steps:
-  - run: |
-      ./outdated.sh /tmp/action-npm-outdated.tmp
-      cat /tmp/action-npm-outdated.tmp >> "$GITHUB_OUTPUT"
+  - run: ./outdated.sh
     env:
       INPUT_DEPENDENCY: ${{ inputs.dependency }}
       INPUT_PROJECT: ${{ inputs.project }}
