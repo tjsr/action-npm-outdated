@@ -30,6 +30,8 @@ jobs:
         skipNpmCiExecute: false
     
     - name: Output the updated version
+      env:
+        OUTPUT: ${{ fromJson(steps.outdated.outputs) }}
       run: |
-        echo "Output data: ${{ fromJson(steps.outdated.outputs) }}"
+        echo "Output data: $OUTPUT"
         echo "The updated version is ${{ steps.outdated.outputs.latestVersion }}"
