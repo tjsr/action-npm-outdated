@@ -40,9 +40,8 @@ runs:
   using: 'composite'
   steps:
   - run: |
-      OUTPUT=`./outdated.sh`
-      echo Script output: $OUTPUT
-      echo $OUTPUT >> "$GITHUB_OUTPUT"
+      ./outdated.sh /tmp/action-npm-outdated.tmp
+      cat /tmp/action-npm-outdated.tmp >> "$GITHUB_OUTPUT"
     env:
       INPUT_DEPENDENCY: ${{ inputs.dependency }}
       INPUT_PROJECT: ${{ inputs.project }}
