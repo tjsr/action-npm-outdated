@@ -20,7 +20,8 @@ jobs:
         # Defaults to the user or organization that owns the workflow file
         scope: '@tjsr'
 
-    - uses: ./
+    - name: Run npn-action-outdated from local source action
+      uses: ./
       id: npm-action-outdated
       with:
         token: ${{ secrets.GITHUB_TOKEN }}
@@ -45,7 +46,8 @@ jobs:
     - name: Install latest glob for testing
       run: npm install glob@latest
 
-    - uses: ./
+    - name: Run npn-action-outdated to test glob
+      uses: ./
       id: npm-action-outdated-glob
       with:
         token: ${{ secrets.GITHUB_TOKEN }}
