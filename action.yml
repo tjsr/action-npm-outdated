@@ -37,7 +37,9 @@ outputs:
 runs:
   using: 'composite'
   steps:
-  - run: ./outdated.sh
+  - run: |
+      echo $GITHUB_OUTPUT
+      ./outdated.sh
     shell: bash
     id: action-npm-outdated
     name: Run action-npm-outdated
