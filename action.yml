@@ -35,6 +35,7 @@ outputs:
     description: 'The version wanted by the package'
 
 runs:
+  runs-on: ubuntu-latest
   using: 'composite'
   steps:
   - run: |
