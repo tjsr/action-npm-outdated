@@ -52,7 +52,7 @@ CURRENT_VERSION=$(echo $PACKAGE_OUTDATED | jq -r --arg project "$INPUT_PROJECT" 
 ')
 
 DEPENDENT_DATA=$(echo $PACKAGE_OUTDATED | jq -r --arg project "$INPUT_PROJECT" '
-  .[] | select(.dependent == $project) | . + hasNewVersion = (.current != .latest)
+  .[] | select(.dependent == $project) | .hasNewVersion = (.current != .latest)
 ')
 
 echo $DEPENDENT_DATA >> "$GITHUB_OUTPUT"
