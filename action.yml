@@ -33,19 +33,19 @@ outputs:
     description: 'The latest version available'
   wanted:
     description: 'The version wanted by the package'
+  dependent:
+    description: 'The dependent package name - should be the same as the project input value'
 
 runs:
-  runs-on: ubuntu-latest
   using: 'composite'
+  main: 'outdated.sh'
   steps:
-  - run: |
-      echo $GITHUB_OUTPUT
-      ./outdated.sh
-    shell: bash
-    id: action-npm-outdated
-    name: Run action-npm-outdated
-    env: 
+  - run: ./outdated.sh >> $GITHUB_OUTPUT
+    env:
       INPUT_DEPENDENCY: ${{ inputs.dependency }}
       INPUT_PROJECT: ${{ inputs.project }}
       INPUT_FAIL_ON_NO_NEW_VERSION: ${{ inputs.failOnNoNewVersion }}
       INPUT_SKIP_NPM_CI_EXECUTE: ${{ inputs.skipNpmCiExecute }}
+    shell: bash
+    id: action-npm-outdated
+    name: Run action-npm-outdated
