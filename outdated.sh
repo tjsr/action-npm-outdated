@@ -51,6 +51,12 @@ CURRENT_VERSION=$(echo $PACKAGE_OUTDATED | jq -r --arg project "$INPUT_PROJECT" 
   .[] | select(.dependent == $project) | .current
 ')
 
+DEPENDENT_DATA=$(echo $PACKAGE_OUTDATED | jq -r --arg project "$INPUT_PROJECT" '
+  .[] | select(.dependent == $project)
+')
+
+echo Dep data: $DEPENDENT_DATA
+
 if [ -z "$LATEST_VERSION" ]; then
   echo "No new version found for $PACKAGE"
   echo "hasNewVersion=false" >> "$GITHUB_OUTPUT"
