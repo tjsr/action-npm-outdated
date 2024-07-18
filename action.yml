@@ -37,12 +37,12 @@ outputs:
 runs:
   using: 'composite'
   steps:
-  - name: Run action-npm-outdated
+  - run: ./outdated.sh
+    shell: bash
+    id: action-npm-outdated
+    name: Run action-npm-outdated
     env: 
       INPUT_DEPENDENCY: ${{ inputs.dependency }}
       INPUT_PROJECT: ${{ inputs.project }}
       INPUT_FAIL_ON_NO_NEW_VERSION: ${{ inputs.failOnNoNewVersion }}
       INPUT_SKIP_NPM_CI_EXECUTE: ${{ inputs.skipNpmCiExecute }}
-    id: action-npm-outdated
-    shell: bash
-    run: ./outdated.sh
