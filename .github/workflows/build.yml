@@ -21,7 +21,7 @@ jobs:
         scope: '@tjsr'
 
     - uses: ./
-      id: outdated
+      id: npm-action-outdated
       with:
         token: ${{ secrets.GITHUB_TOKEN }}
         setup-npm: true
@@ -31,8 +31,8 @@ jobs:
     
     - name: Output the updated version
       run: |
-        if [ -z "${{ steps.outdated.outputs.latest }}" ]; then
+        if [ -z "${{ steps.npm-action-outdated.outputs.latest }}" ]; then
           echo "outputs.latest is empty"
           exit 1
         fi
-        echo "The updated version is ${{ steps.outdated.outputs.latest }}"
+        echo "The updated version is ${{ steps.npm-action-outdated.outputs.latest }}"
