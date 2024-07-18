@@ -45,4 +45,4 @@ runs:
       INPUT_SKIP_NPM_CI_EXECUTE: ${{ inputs.skipNpmCiExecute }}
     id: action-npm-outdated
     shell: bash
-    run: outdated.sh
+    run: ./outdated.sh
