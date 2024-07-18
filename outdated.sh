@@ -11,10 +11,10 @@ if [ -z "$INPUT_PROJECT" ]; then
     exit 1
 fi
 
-if [ -z "$GITHUB_OUTPUT" ]; then
-  # For testing purposes
-  GITHUB_OUTPUT="/dev/stdout"
-fi
+# if [ -z "$GITHUB_OUTPUT" ]; then
+#   # For testing purposes
+#   GITHUB_OUTPUT="/dev/stdout"
+# fi
 
 if [ "$INPUT_SKIP_NPM_CI_EXECUTE" == "false" ]; then
   npm ci
@@ -62,3 +62,4 @@ echo "hasNewVersion=true" >> "$GITHUB_OUTPUT"
 echo "wantedVersion=$WANTED_VERSION" >> "$GITHUB_OUTPUT"
 echo "latestVersion=$LATEST_VERSION" >> "$GITHUB_OUTPUT"
 echo "currentVersion=$CURRENT_VERSION" >> "$GITHUB_OUTPUT"
+echo "LATEST_VERSION=$LATEST_VERSION" >> "$GITHUB_OUTPUT"
