@@ -22,7 +22,7 @@ jobs:
 
     - name: Run npn-action-outdated from local source action
       uses: tjsr/action-npm-outdated@action-test
-      id: npm-action-outdated
+      id: test-outdated-rimraf
       with:
         token: ${{ secrets.GITHUB_TOKEN }}
         setup-npm: true
@@ -32,23 +32,23 @@ jobs:
     
     - name: Output the updated version
       run: |
-        if [ -z "${{ steps.npm-action-outdated.outputs.latest }}" ]; then
+        if [ -z "${{ steps.test-outdated-rimraf.outputs.latest }}" ]; then
           echo "outputs.latest is empty"
           exit 1
         fi
-        if [ "${{ steps.npm-action-outdated.outputs.hasNewVersion }}" != "true" ]; then
+        if [ "${{ steps.test-outdated-rimraf.outputs.hasNewVersion }}" != "true" ]; then
           echo "outputs.hasNewVersion should be true"
           exit 1
         fi
 
-        echo "The updated version is ${{ steps.npm-action-outdated.outputs.latest }}"
+        echo "The updated version is ${{ steps.test-outdated-rimraf.outputs.latest }}"
 
     - name: Install latest glob for testing
       run: npm install glob@latest
 
     - name: Run npn-action-outdated to test glob
       uses: tjsr/action-npm-outdated@action-test
-      id: npm-action-outdated-glob
+      id: test-outdated-glob
       with:
         token: ${{ secrets.GITHUB_TOKEN }}
         setup-npm: false
@@ -58,7 +58,7 @@ jobs:
 
     - name: Check glob already has latest
       run: |
-        if [ "${{ steps.npm-action-outdated-glob.outputs.hasNewVersion }}" != "false" ]; then
+        if [ "${{ steps.test-outdated-glob.outputs.hasNewVersion }}" != "false" ]; then
           echo "outputs.hasNewVersion should be false"
           exit 1
         fi
