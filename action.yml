@@ -16,9 +16,6 @@ inputs:
   project:
     description: 'The target project name that must be the owner of the package'
     required: true
-  failOnNoNewVersion: 'Whether the build should fail with an exit code if no new version is available for the specified package'
-    required: false
-    default: false
 outputs:
   hasNewVersion:
     description: 'Whether or not there is a new version'
