@@ -44,7 +44,11 @@ LATEST_VERSION=$(echo $PACKAGE_OUTDATED | jq -r --arg project "$INPUT_PROJECT" '
 ')
 
 WANTED_VERSION=$(echo $PACKAGE_OUTDATED | jq -r --arg project "$INPUT_PROJECT" '
-  .[] | select(.dependent == $project) | .latest
+  .[] | select(.dependent == $project) | .wanted
+')
+
+CURRENT_VERSION=$(echo $PACKAGE_OUTDATED | jq -r --arg project "$INPUT_PROJECT" '
+  .[] | select(.dependent == $project) | .current
 ')
 
 if [ -z "$LATEST_VERSION" ]; then
@@ -53,7 +57,8 @@ if [ -z "$LATEST_VERSION" ]; then
   exit 1
 fi
 
-echo "New version of $PACKAGE found: $LATEST_VERSION"
+echo "Package $PACKAGE@$CURRENT_VERSION wants $WANTED_VERSION with $LATEST_VERSION latest available."
 echo "hasNewVersion=true" >> "$GITHUB_OUTPUT"
 echo "wantedVersion=$WANTED_VERSION" >> "$GITHUB_OUTPUT"
 echo "latestVersion=$LATEST_VERSION" >> "$GITHUB_OUTPUT"
+echo "currentVersion=$CURRENT_VERSION" >> "$GITHUB_OUTPUT"
