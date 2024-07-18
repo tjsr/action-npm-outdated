@@ -36,7 +36,7 @@ outputs:
 runs:
   using: 'composite'
   steps:
-  - run: ./outdated.sh
+  - run: . $GITHUB_ACTION_PATH/outdated.sh
     env:
       INPUT_DEPENDENCY: ${{ inputs.dependency }}
       INPUT_PROJECT: ${{ inputs.project }}
