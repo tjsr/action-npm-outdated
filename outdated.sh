@@ -36,7 +36,7 @@ if [ -z "$OUTDATED" ] || [ "$OUTDATED" = "{}" ]; then
   exit 0
 fi
 
-PACKAGE_OUTDATED=$(echo "$OUTDATED" | jq -r --arg package "$PACKAGE" '
+PACKAGE_OUTDATED=$(echo "$OUTDATED" | jq -c -r --arg package "$PACKAGE" '
   .[$package] | if type == "array" then . else [.] end
 ')
 
@@ -52,11 +52,12 @@ PACKAGE_OUTDATED=$(echo "$OUTDATED" | jq -r --arg package "$PACKAGE" '
 #   .[] | select(.dependent == $project) | .current
 # ')
 
-DEPENDENT_DATA=$(echo $PACKAGE_OUTDATED | jq -r --arg project "$INPUT_PROJECT" '
+DEPENDENT_DATA=$(echo $PACKAGE_OUTDATED | jq -c -r --arg project "$INPUT_PROJECT" '
   .[] | select(.dependent == $project) | .hasNewVersion = (.current != .latest)
 ')
 
-echo $DEPENDENT_DATA >> "$GITHUB_OUTPUT"
+echo "$DEPENDENT_DATA" | jq -r 'to_entries[] | "\(.key)=\(.value)"' >> $GITHUB_OUTPUT
+# echo $DEPENDENT_DATA >> "$GITHUB_OUTPUT"
 if [ "$(echo $DEPENDENT_DATA | jq -r .hasNewVersion)" != "true" ]; then
   echo "No new version found for $PACKAGE"
     if [ "$INPUT_FAIL_ON_NO_NEW_VERSION" = "true" ]; then
