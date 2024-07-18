@@ -9,6 +9,7 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "glob": "^11.0.0",
     "rimraf": "^5.0.6"
   }
 }
