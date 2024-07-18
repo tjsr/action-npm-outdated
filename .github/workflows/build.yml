@@ -27,6 +27,7 @@ jobs:
         setup-npm: true
         dependency: 'rimraf'
         project: 'action-npm-outdated'
+        skipNpmCiExecute: false
     
     - name: Output the updated version
       run: echo "The updated version is ${{ steps.action-npm-outdated.outputs.latestVersion }}"
