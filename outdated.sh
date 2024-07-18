@@ -1,51 +1,65 @@
 #!/bin/bash
 set +e
 
+if [ -z "$1" ]; then
+  if [ ! -z "$GITHUB_OUTPUT" ]; then
+    # For testing purposes
+    OUTPUT_TARGET="$GITHUB_OUTPUT"
+  else
+    OUTPUT_TARGET="/dev/stdout"
+    echo Output file param was not specified at \$1 and GITHUB_OUTPUT not present, outputting to $OUTPUT_TARGET
+  fi
+else
+  OUTPUT_TARGET=$1
+fi
+
 if [ -z "$INPUT_DEPENDENCY" ]; then
-    echo "'dependency' must be provided"
+    >&2 echo "'dependency' must be provided"
     exit 1
-fi  
+else
+ # To-do - check input_dep or package as input.
+  PACKAGE=$INPUT_DEPENDENCY
+fi
 
 if [ -z "$INPUT_PROJECT" ]; then
-    echo "'project' must be provided"
+    >&2 echo "'project' must be provided"
     exit 1
 fi
 
-if [ -z "$GITHUB_OUTPUT" ]; then
-  # For testing purposes
-  GITHUB_OUTPUT="/dev/stdout"
+
+if [ "$INPUT_SKIP_NPM_CI_EXECUTE" == "false" ]; then
+  npm ci >>/dev/stderr
 fi
 
-PACKAGE=$INPUT_DEPENDENCY
 OUTDATED=`npm outdated --json --all $PACKAGE`
 
-echo "Checking $PACKAGE"
+echo "Checking for updated versions of $PACKAGE on $INPUT_PROJECT"
 
 if [ -z "$OUTDATED" ] || [ "$OUTDATED" = "{}" ]; then
   echo "No new version found for $PACKAGE"
-  echo "hasNewVersion=false" >> "$GITHUB_OUTPUT"
-  exit 1
+  echo "hasNewVersion=false" >> "$OUTPUT_TARGET"
+  if [ "$INPUT_FAIL_ON_NO_NEW_VERSION" = "true" ]; then
+    exit 1
+  fi
+  exit 0
 fi
 
-PACKAGE_OUTDATED=$(echo "$OUTDATED" | jq -r --arg package "$PACKAGE" '
+PACKAGE_OUTDATED=$(echo "$OUTDATED" | jq -c -r --arg package "$PACKAGE" '
   .[$package] | if type == "array" then . else [.] end
 ')
 
-LATEST_VERSION=$(echo $PACKAGE_OUTDATED | jq -r --arg project "$INPUT_PROJECT" '
-  .[] | select(.dependent == $project) | .latest
+DEPENDENT_DATA=$(echo $PACKAGE_OUTDATED | jq -c -r --arg project "$INPUT_PROJECT" '
+  .[] | select(.dependent == $project) | .hasNewVersion = (.current != .latest)
 ')
 
-WANTED_VERSION=$(echo $PACKAGE_OUTDATED | jq -r --arg project "$INPUT_PROJECT" '
-  .[] | select(.dependent == $project) | .latest
-')
-
-if [ -z "$LATEST_VERSION" ]; then
+echo "$DEPENDENT_DATA" | jq -r 'to_entries[] | "\(.key)=\(.value)"' >> "$OUTPUT_TARGET"
+if [ "$(echo $DEPENDENT_DATA | jq -r .hasNewVersion)" != "true" ]; then
   echo "No new version found for $PACKAGE"
-  echo "hasNewVersion=false" >> "$GITHUB_OUTPUT"
-  exit 1
+  echo "hasNewVersion=false" >> "$OUTPUT_TARGET"
+  if [ "$INPUT_FAIL_ON_NO_NEW_VERSION" = "true" ]; then
+    exit 1
+  fi
+  exit 0
 fi
 
-echo "New version of $PACKAGE found: $LATEST_VERSION"
-echo "hasNewVersion=true" >> "$GITHUB_OUTPUT"
-echo "wantedVersion=$WANTED_VERSION" >> "$GITHUB_OUTPUT"
-echo "latestVersion=$LATEST_VERSION" >> "$GITHUB_OUTPUT"
+echo "Package $PACKAGE@$(echo $DEPENDENT_DATA | jq -r .current) wants $(echo $DEPENDENT_DATA | jq -r .wanted) with $(echo $DEPENDENT_DATA | jq -r .latest) latest available."

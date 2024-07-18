@@ -1,0 +1,15 @@
+{
+  "name": "action_npm_outdated",
+  "version": "1.0.0",
+  "description": "A github action to return the latest version available and requested by a dependency in an npm package",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "glob": "^11.0.0",
+    "rimraf": "^5.0.6"
+  }
+}

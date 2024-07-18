@@ -2,30 +2,46 @@ name: '@tjsr/action-npm-outdated'
 description: Check for outdated npm packages
 author: Tim Rowe <tim@tjsr.id.au>
 inputs:
-  token:
-    description: 'GitHub token'
-    required: false
-    default: ${{ github.token }}
-  setup-npm:
-    description: Generate an .npmrc file to authenticate with the npm registry
-    required: false
-    default: false
-  dependencies:
-    description: 'Dependencies to check'
+  dependency:
+    description: 'Dependency to check'
     required: false
   project:
     description: 'The target project name that must be the owner of the package'
     required: true
+  failOnNoNewVersion:
+    description: 'Whether the build should fail with an exit code if no new version is available for the specified package'
+    required: false
+    default: false
+  skipNpmCiExecute:
+    description: 'Whether to skip the npm ci command execution being called implicitly'
+    required: false
+    default: true
 outputs:
+  current:
+    description: 'The current version used by the package'
+    value: ${{ steps.action-npm-outdated.outputs.current }}
   hasNewVersion:
     description: 'Whether or not there is a new version'
-  wantedVersion:
-    description: 'The version wanted by the package'
-  latestVersion:
+    value: ${{ steps.action-npm-outdated.outputs.hasNewVersion }}
+  latest:
     description: 'The latest version available'
+    value: ${{ steps.action-npm-outdated.outputs.latest }}
+  wanted:
+    description: 'The version wanted by the package'
+    value: ${{ steps.action-npm-outdated.outputs.wanted }}
+  dependent:
+    description: 'The dependent package name - should be the same as the project input value'
+    value: ${{ steps.action-npm-outdated.outputs.dependent }}
 
 runs:
-  using: bash
-  pre: ./check.sh
-  main: ./outdated.sh  
-  
+  using: 'composite'
+  steps:
+  - run: ./outdated.sh
+    env:
+      INPUT_DEPENDENCY: ${{ inputs.dependency }}
+      INPUT_PROJECT: ${{ inputs.project }}
+      INPUT_FAIL_ON_NO_NEW_VERSION: ${{ inputs.failOnNoNewVersion }}
+      INPUT_SKIP_NPM_CI_EXECUTE: ${{ inputs.skipNpmCiExecute }}
+    shell: bash
+    id: action-npm-outdated
+    name: Run action-npm-outdated

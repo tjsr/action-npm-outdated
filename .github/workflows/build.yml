@@ -1,0 +1,66 @@
+name: Test the outdated action
+run-name: ${{ github.actor }} Running action_npm_outdated test.
+on: [push, workflow_dispatch] 
+jobs:
+  test-action:
+    runs-on: ubuntu-latest
+    env:
+      DOCKER_BUILDKIT: 1
+      BUILDKIT_PROGRESS: plain
+
+    steps:
+    - name: Check out repository code
+      uses: actions/checkout@v4
+
+    # Setup .npmrc file to publish to GitHub Packages
+    - uses: actions/setup-node@v4
+      with:
+        node-version: 20.15.1
+        registry-url: 'https://npm.pkg.github.com'
+        # Defaults to the user or organization that owns the workflow file
+        scope: '@tjsr'
+
+    - name: Run npn-action-outdated from local source action
+      uses: ./
+      id: test-outdated-rimraf
+      with:
+        token: ${{ secrets.GITHUB_TOKEN }}
+        setup-npm: true
+        dependency: 'rimraf'
+        project: 'action-npm-outdated'
+        skipNpmCiExecute: false
+    
+    - name: Output the updated version
+      run: |
+        if [ -z "${{ steps.test-outdated-rimraf.outputs.latest }}" ]; then
+          echo "outputs.latest is empty"
+          exit 1
+        fi
+        if [ "${{ steps.test-outdated-rimraf.outputs.hasNewVersion }}" != "true" ]; then
+          echo "outputs.hasNewVersion should be true"
+          exit 1
+        fi
+
+        echo "The updated version is ${{ steps.test-outdated-rimraf.outputs.latest }}"
+
+    - name: Install latest glob for testing
+      run: npm install glob@latest
+
+    - name: Run npn-action-outdated to test glob
+      uses: ./
+      id: test-outdated-glob
+      with:
+        token: ${{ secrets.GITHUB_TOKEN }}
+        setup-npm: false
+        dependency: 'glob'
+        project: 'action-npm-outdated'
+        skipNpmCiExecute: false
+
+    - name: Check glob already has latest
+      run: |
+        if [ "${{ steps.test-outdated-glob.outputs.hasNewVersion }}" != "false" ]; then
+          echo "outputs.hasNewVersion should be false"
+          exit 1
+        fi
+        echo "Confirmed glob already has the latest version"
+  
