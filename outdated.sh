@@ -16,6 +16,10 @@ if [ -z "$GITHUB_OUTPUT" ]; then
   GITHUB_OUTPUT="/dev/stdout"
 fi
 
+if [ "$INPUT_SKIP_NPM_CI_EXECUTE" == "false" ]; then
+  npm ci
+fi
+
 PACKAGE=$INPUT_DEPENDENCY
 OUTDATED=`npm outdated --json --all $PACKAGE`
 

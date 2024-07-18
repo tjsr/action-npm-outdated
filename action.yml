@@ -20,6 +20,10 @@ inputs:
     description: 'Whether the build should fail with an exit code if no new version is available for the specified package'
     required: false
     default: false
+  skipNpmCiExecute:
+    description: 'Whether to skip the npm ci command execution being called implicitly'
+    required: false
+    default: true
 outputs:
   hasNewVersion:
     description: 'Whether or not there is a new version'
@@ -36,6 +40,7 @@ runs:
       INPUT_DEPENDENCY: ${{ inputs.dependency }}
       INPUT_PROJECT: ${{ inputs.project }}
       INPUT_FAIL_ON_NO_NEW_VERSION: ${{ inputs.failOnNoNewVersion }}
+      INPUT_SKIP_NPM_CI_EXECUTE: ${{ inputs.skipNpmCiExecute }}
     id: action-npm-outdated
     shell: bash
     run: ./outdated.sh
