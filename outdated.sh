@@ -48,18 +48,6 @@ PACKAGE_OUTDATED=$(echo "$OUTDATED" | jq -c -r --arg package "$PACKAGE" '
   .[$package] | if type == "array" then . else [.] end
 ')
 
-# LATEST_VERSION=$(echo $PACKAGE_OUTDATED | jq -r --arg project "$INPUT_PROJECT" '
-#   .[] | select(.dependent == $project) | .latest
-# ')
-
-# WANTED_VERSION=$(echo $PACKAGE_OUTDATED | jq -r --arg project "$INPUT_PROJECT" '
-#   .[] | select(.dependent == $project) | .wanted
-# ')
-
-# CURRENT_VERSION=$(echo $PACKAGE_OUTDATED | jq -r --arg project "$INPUT_PROJECT" '
-#   .[] | select(.dependent == $project) | .current
-# ')
-
 DEPENDENT_DATA=$(echo $PACKAGE_OUTDATED | jq -c -r --arg project "$INPUT_PROJECT" '
   .[] | select(.dependent == $project) | .hasNewVersion = (.current != .latest)
 ')
