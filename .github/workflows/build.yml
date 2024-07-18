@@ -21,7 +21,7 @@ jobs:
         scope: '@tjsr'
 
     - name: Run npn-action-outdated from local source action
-      uses: tjsr/action-npm-outdated@action-test
+      uses: ./
       id: test-outdated-rimraf
       with:
         token: ${{ secrets.GITHUB_TOKEN }}
@@ -47,7 +47,7 @@ jobs:
       run: npm install glob@latest
 
     - name: Run npn-action-outdated to test glob
-      uses: tjsr/action-npm-outdated@action-test
+      uses: ./
       id: test-outdated-glob
       with:
         token: ${{ secrets.GITHUB_TOKEN }}
