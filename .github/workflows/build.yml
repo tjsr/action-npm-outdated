@@ -9,7 +9,6 @@ jobs:
     env:
       DOCKER_BUILDKIT: 1
       BUILDKIT_PROGRESS: plain
-      TESTS_PATH: "$GITHUB_WORKSPACE/tests/npm-project"
     steps:
     - name: Check out repository code
       uses: actions/checkout@v4
@@ -29,7 +28,7 @@ jobs:
         dependency: 'rimraf'
         project: 'npm-project'
         skipNpmCiExecute: false
-        projectPath: ${{ env.TESTS_PATH }}
+        projectPath: "${{ env.GITHUB_WORKSPACE }}/tests/npm-project"
     
     - name: Output the updated version
       run: |
@@ -56,7 +55,7 @@ jobs:
         dependency: 'glob'
         project: 'npm-project'
         skipNpmCiExecute: false
-        projectPath: ${{ env.TESTS_PATH }}
+        projectPath: "${{ env.GITHUB_WORKSPACE }}/tests/npm-project"
 
     - name: Check glob already has latest
       run: |
