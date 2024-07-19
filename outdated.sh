@@ -41,6 +41,7 @@ fi
 
 echo Operating from $PWD
 echo Action has npm version $(npm --version)
+npm outdated --json $PACKAGE --verbose
 OUTDATED=$(npm outdated --json $PACKAGE)
 ls -lah
 cat package.json
