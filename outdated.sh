@@ -45,7 +45,6 @@ echo "Checking for updated versions of $PACKAGE on $PROJECT"
 
 if [ -z "$OUTDATED" ] || [ "$OUTDATED" = "{}" ]; then
   echo "hasNewVersion=false" >> "$OUTPUT_TARGET"
-  echo $OUTDATED
   if [ "$INPUT_FAIL_ON_NO_NEW_VERSION" = "true" ]; then
     echo "No new version found for $PACKAGE - ending with error."
     exit 1
@@ -65,6 +64,7 @@ DEPENDENT_DATA=$(echo $PACKAGE_OUTDATED | jq -c -r --arg project "$PROJECT" '
 echo "$DEPENDENT_DATA" | jq -r 'to_entries[] | "\(.key)=\(.value)"' >> "$OUTPUT_TARGET"
 if [ "$(echo $DEPENDENT_DATA | jq -r .hasNewVersion)" != "true" ]; then
   echo "No new version found for $PACKAGE"
+  echo $OUTDATED
   echo "hasNewVersion=false" >> "$OUTPUT_TARGET"
   if [ "$INPUT_FAIL_ON_NO_NEW_VERSION" = "true" ]; then
     exit 1
