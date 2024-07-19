@@ -26,7 +26,7 @@ jobs:
       id: test-outdated-rimraf
       with:
         dependency: 'rimraf'
-        project: 'action-npm-outdated'
+        project: 'npm-project'
         skipNpmCiExecute: false
         projectPath: "${{ env.GITHUB_WORKSPACE }}/tests/npm-project"
     
@@ -53,7 +53,7 @@ jobs:
       id: test-outdated-glob
       with:
         dependency: 'glob'
-        project: 'action-npm-outdated'
+        project: 'npm-project'
         skipNpmCiExecute: false
         projectPath: "${{ env.GITHUB_WORKSPACE }}/tests/npm-project"
 
