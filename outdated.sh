@@ -1,6 +1,11 @@
 #!/bin/bash
 set +e
 
+if [ -z "$INPUT_PROJECT_PATH" ]; then
+  echo "Switching in to $INPUT_PROJECT_PATH to run outdated commands"
+  cd $INPUT_PROJECT_PATH
+fi
+
 if [ -z "$1" ]; then
   if [ ! -z "$GITHUB_OUTPUT" ]; then
     # For testing purposes

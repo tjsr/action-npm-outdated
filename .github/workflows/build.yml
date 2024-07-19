@@ -1,13 +1,15 @@
 name: Test the outdated action
 run-name: ${{ github.actor }} Running action_npm_outdated test.
 on: [push, workflow_dispatch] 
+env:
+  GITHUB_WORKSPACE:
 jobs:
   test-action:
     runs-on: ubuntu-latest
     env:
       DOCKER_BUILDKIT: 1
       BUILDKIT_PROGRESS: plain
-
+      TESTS_PATH: "$GITHUB_WORKSPACE/tests/npm-project"
     steps:
     - name: Check out repository code
       uses: actions/checkout@v4
@@ -20,6 +22,9 @@ jobs:
         # Defaults to the user or organization that owns the workflow file
         scope: '@tjsr'
 
+    - name: Install dependencies first
+      run: cd ${{ env.TESTS_PATH }} && npm ci
+
     - name: Run npn-action-outdated from local source action
       uses: ./
       id: test-outdated-rimraf
@@ -29,6 +34,7 @@ jobs:
         dependency: 'rimraf'
         project: 'action-npm-outdated'
         skipNpmCiExecute: false
+        projectPath: ${{ env.TESTS_PATH }}
     
     - name: Output the updated version
       run: |
@@ -44,7 +50,7 @@ jobs:
         echo "The updated version is ${{ steps.test-outdated-rimraf.outputs.latest }}"
 
     - name: Install latest glob for testing
-      run: npm install glob@latest
+      run: cd ${{ env.TESTS_PATH }} && npm install glob@latest
 
     - name: Run npn-action-outdated to test glob
       uses: ./
@@ -55,6 +61,7 @@ jobs:
         dependency: 'glob'
         project: 'action-npm-outdated'
         skipNpmCiExecute: false
+        projectPath: ${{ env.TESTS_PATH }}
 
     - name: Check glob already has latest
       run: |
