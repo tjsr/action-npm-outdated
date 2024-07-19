@@ -9,7 +9,6 @@ jobs:
     env:
       DOCKER_BUILDKIT: 1
       BUILDKIT_PROGRESS: plain
-      TESTS_PATH: "$GITHUB_WORKSPACE/tests/npm-project"
     steps:
     - name: Check out repository code
       uses: actions/checkout@v4
@@ -29,7 +28,7 @@ jobs:
         dependency: 'rimraf'
         project: 'action-npm-outdated'
         skipNpmCiExecute: false
-        projectPath: ${{ env.TESTS_PATH }}
+        projectPath: "${{ env.GITHUB_WORKSPACE }}/tests/npm-project"
     
     - name: Output the updated version
       run: |
@@ -45,6 +44,8 @@ jobs:
         echo "The updated version is ${{ steps.test-outdated-rimraf.outputs.latest }}"
 
     - name: Install latest glob for testing
+      env:
+        TESTS_PATH: "${{ env.GITHUB_WORKSPACE }}/tests/npm-project"
       run: cd ${{ env.TESTS_PATH }} && npm install glob@latest
 
     - name: Run npn-action-outdated to test glob
@@ -54,7 +55,7 @@ jobs:
         dependency: 'glob'
         project: 'action-npm-outdated'
         skipNpmCiExecute: false
-        projectPath: ${{ env.TESTS_PATH }}
+        projectPath: "${{ env.GITHUB_WORKSPACE }}/tests/npm-project"
 
     - name: Check glob already has latest
       run: |
