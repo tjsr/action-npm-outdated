@@ -20,12 +20,6 @@ jobs:
         # Defaults to the user or organization that owns the workflow file
         scope: '@tjsr'
 
-    - name: Debug output npm outdated
-      run: npm outdated
-
-    - name: Debug output npm outdated json
-      run: npm outdated --json
-
     - name: Run npn-action-outdated from local source action
       uses: ./
       id: test-outdated-rimraf

@@ -40,6 +40,7 @@ if [ "$INPUT_SKIP_NPM_CI_EXECUTE" == "false" ]; then
 fi
 
 OUTDATED=$(npm outdated --json $PACKAGE)
+echo $OUTDATED
 
 echo "Checking for updated versions of $PACKAGE on $PROJECT"
 
