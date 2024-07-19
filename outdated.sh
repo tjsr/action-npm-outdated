@@ -39,6 +39,7 @@ if [ "$INPUT_SKIP_NPM_CI_EXECUTE" == "false" ]; then
   npm ci >>/dev/stderr
 fi
 
+echo Operating from $PWD
 OUTDATED=$(npm outdated --json $PACKAGE)
 echo $OUTDATED
 
