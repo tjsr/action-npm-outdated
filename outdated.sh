@@ -41,6 +41,8 @@ fi
 
 echo Operating from $PWD
 OUTDATED=$(npm outdated --json $PACKAGE)
+ls -lah
+cat package.json
 echo $OUTDATED
 
 echo "Checking for updated versions of $PACKAGE on $PROJECT"
