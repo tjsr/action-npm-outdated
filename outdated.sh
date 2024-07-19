@@ -42,13 +42,13 @@ fi
 echo Operating from $PWD
 pwd
 echo Action has npm version $(npm --version)
-npm outdated --json $PACKAGE
-npm outdated --json $PACKAGE
-npm outdated --json $PACKAGE
-npm outdated --json $PACKAGE
-npm outdated --json $PACKAGE
-npm outdated --json $PACKAGE
-OUTDATED=$(npm outdated --json $PACKAGE)
+npm outdated --json $PACKAGE --verbose
+npm outdated --json $PACKAGE --verbose
+npm outdated --json $PACKAGE --verbose
+npm outdated --json $PACKAGE --verbose
+npm outdated --json $PACKAGE --verbose
+npm outdated --json $PACKAGE --verbose
+OUTDATED=$(npm outdated --json $PACKAG --verbose)
 echo $OUTDATED
 
 echo "Checking for updated versions of $PACKAGE on $PROJECT"
