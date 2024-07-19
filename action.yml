@@ -40,12 +40,15 @@ runs:
   using: 'composite'
   steps:
   - name: npm outdated all check
+    shell: bash
     run: |
       npm outdated --verbose --json --all
   - name: npm outdated check
+    shell: bash
     run: |
       npm outdated --verbose --json
   - name: npm outdated dep only check
+    shell: bash
     run: |
       npm outdated --verbose --json ${{ inputs.dependency }}
   - run: . $GITHUB_ACTION_PATH/outdated.sh
