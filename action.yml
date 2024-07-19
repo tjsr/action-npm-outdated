@@ -42,15 +42,15 @@ runs:
   - name: npm outdated all check
     shell: bash
     run: |
-      npm outdated --verbose --json --all || true
-  - name: npm outdated check
-    shell: bash
-    run: |
-      npm outdated --verbose --json || true
-  - name: npm outdated dep only check
-    shell: bash
-    run: |
-      npm outdated --verbose --json ${{ inputs.dependency }} || true
+      npm outdated --json --all || true
+  # - name: npm outdated check
+  #   shell: bash
+  #   run: |
+  #     npm outdated --verbose --json || true
+  # - name: npm outdated dep only check
+  #   shell: bash
+  #   run: |
+  #     npm outdated --verbose --json ${{ inputs.dependency }} || true
   - run: . $GITHUB_ACTION_PATH/outdated.sh
     env:
       INPUT_DEPENDENCY: ${{ inputs.dependency }}
