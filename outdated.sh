@@ -1,7 +1,7 @@
 #!/bin/bash
 set +e
 
-if [ -z "$INPUT_PROJECT_PATH" ]; then
+if [ ! -z "$INPUT_PROJECT_PATH" ]; then
   echo "Switching in to $INPUT_PROJECT_PATH to run outdated commands"
   cd $INPUT_PROJECT_PATH
 fi

@@ -22,9 +22,6 @@ jobs:
         # Defaults to the user or organization that owns the workflow file
         scope: '@tjsr'
 
-    - name: Install dependencies first
-      run: cd ${{ env.TESTS_PATH }} && npm ci
-
     - name: Run npn-action-outdated from local source action
       uses: ./
       id: test-outdated-rimraf
