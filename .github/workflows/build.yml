@@ -26,7 +26,6 @@ jobs:
       uses: ./
       id: test-outdated-rimraf
       with:
-        setup-npm: true
         dependency: 'rimraf'
         project: 'action-npm-outdated'
         skipNpmCiExecute: false
@@ -52,7 +51,6 @@ jobs:
       uses: ./
       id: test-outdated-glob
       with:
-        setup-npm: false
         dependency: 'glob'
         project: 'action-npm-outdated'
         skipNpmCiExecute: false
