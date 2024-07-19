@@ -47,10 +47,10 @@ runs:
     shell: bash
     run: |
       npm outdated --json || true
-  # - name: npm outdated dep only check
-  #   shell: bash
-  #   run: |
-  #     npm outdated --verbose --json ${{ inputs.dependency }} || true
+  - name: npm outdated dep only check
+    shell: bash
+    run: |
+      npm outdated --json ${{ inputs.dependency }} || true
   - run: . $GITHUB_ACTION_PATH/outdated.sh
     env:
       INPUT_DEPENDENCY: ${{ inputs.dependency }}
