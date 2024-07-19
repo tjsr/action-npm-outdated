@@ -16,6 +16,9 @@ inputs:
     description: 'Whether to skip the npm ci command execution being called implicitly'
     required: false
     default: true
+  projectPath:
+    description: 'The path to the project to run npm-related scripts within'
+    required: false
 outputs:
   current:
     description: 'The current version used by the package'
@@ -42,6 +45,7 @@ runs:
       INPUT_PROJECT: ${{ inputs.project }}
       INPUT_FAIL_ON_NO_NEW_VERSION: ${{ inputs.failOnNoNewVersion }}
       INPUT_SKIP_NPM_CI_EXECUTE: ${{ inputs.skipNpmCiExecute }}
+      INPUT_PROJECT_PATH: ${{ inputs.projectPath }}
     shell: bash
     id: action-npm-outdated
     name: Run action-npm-outdated
