@@ -40,6 +40,7 @@ if [ "$INPUT_SKIP_NPM_CI_EXECUTE" == "false" ]; then
 fi
 
 echo Operating from $PWD
+echo Action has npm version $(npm --version)
 OUTDATED=$(npm outdated --json $PACKAGE)
 ls -lah
 cat package.json
