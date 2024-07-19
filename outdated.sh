@@ -49,7 +49,7 @@ npm outdated --json $PACKAGE --verbose
 npm outdated --json $PACKAGE --verbose
 npm outdated --json $PACKAGE --verbose
 npm outdated --json $PACKAGE --verbose
-OUTDATED=$(npm outdated --json $PACKAG --verbose)
+OUTDATED=$(npm outdated --json $PACKAGE --verbose)
 echo $OUTDATED
 
 echo "Checking for updated versions of $PACKAGE on $PROJECT"
