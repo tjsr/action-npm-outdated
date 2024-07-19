@@ -1,14 +1,14 @@
 name: Test the outdated action
 run-name: ${{ github.actor }} Running action_npm_outdated test.
 on: [push, workflow_dispatch] 
-env:
-  GITHUB_WORKSPACE:
 jobs:
   test-action:
     runs-on: ubuntu-latest
     env:
       DOCKER_BUILDKIT: 1
       BUILDKIT_PROGRESS: plain
+      GITHUB_WORKSPACE: ${{ github.workspace }}
+      TEST_PROJECT_PATH: "${{ github.workspace }}/tests/npm-project"
     steps:
     - name: Check out repository code
       uses: actions/checkout@v4
