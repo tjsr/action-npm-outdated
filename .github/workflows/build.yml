@@ -26,7 +26,6 @@ jobs:
       uses: ./
       id: test-outdated-rimraf
       with:
-        token: ${{ secrets.GITHUB_TOKEN }}
         setup-npm: true
         dependency: 'rimraf'
         project: 'action-npm-outdated'
@@ -53,7 +52,6 @@ jobs:
       uses: ./
       id: test-outdated-glob
       with:
-        token: ${{ secrets.GITHUB_TOKEN }}
         setup-npm: false
         dependency: 'glob'
         project: 'action-npm-outdated'
