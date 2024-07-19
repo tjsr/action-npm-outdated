@@ -4,10 +4,10 @@ author: Tim Rowe <tim@tjsr.id.au>
 inputs:
   dependency:
     description: 'Dependency to check'
-    required: false
-  project:
-    description: 'The target project name that must be the owner of the package'
     required: true
+  project:
+    description: 'The target project name that must be the owner of the package. This is usually the directory name the package.json file resides under, not the name field in package.json'
+    required: false
   failOnNoNewVersion:
     description: 'Whether the build should fail with an exit code if no new version is available for the specified package'
     required: false

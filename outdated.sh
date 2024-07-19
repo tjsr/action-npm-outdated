@@ -4,6 +4,15 @@ set +e
 if [ ! -z "$INPUT_PROJECT_PATH" ]; then
   echo "Switching in to $INPUT_PROJECT_PATH to run outdated commands"
   cd $INPUT_PROJECT_PATH
+
+  PROJECT=${INPUT_PROJECT_PATH##*/}
+  PROJECT=${PROJECT:-/}
+else
+  if [ -z "$INPUT_PROJECT" ]; then
+    PROJECT=${PWD##*/}
+  else
+    PROJECT=$INPUT_PROJECT
+  fi
 fi
 
 if [ -z "$1" ]; then
@@ -26,19 +35,13 @@ else
   PACKAGE=$INPUT_DEPENDENCY
 fi
 
-if [ -z "$INPUT_PROJECT" ]; then
-    >&2 echo "'project' must be provided"
-    exit 1
-fi
-
-
 if [ "$INPUT_SKIP_NPM_CI_EXECUTE" == "false" ]; then
   npm ci >>/dev/stderr
 fi
 
 OUTDATED=`npm outdated --json --all $PACKAGE`
 
-echo "Checking for updated versions of $PACKAGE on $INPUT_PROJECT"
+echo "Checking for updated versions of $PACKAGE on $PROJECT"
 
 if [ -z "$OUTDATED" ] || [ "$OUTDATED" = "{}" ]; then
   echo "No new version found for $PACKAGE"
@@ -53,7 +56,7 @@ PACKAGE_OUTDATED=$(echo "$OUTDATED" | jq -c -r --arg package "$PACKAGE" '
   .[$package] | if type == "array" then . else [.] end
 ')
 
-DEPENDENT_DATA=$(echo $PACKAGE_OUTDATED | jq -c -r --arg project "$INPUT_PROJECT" '
+DEPENDENT_DATA=$(echo $PACKAGE_OUTDATED | jq -c -r --arg project "$PROJECT" '
   .[] | select(.dependent == $project) | .hasNewVersion = (.current != .latest)
 ')
 
