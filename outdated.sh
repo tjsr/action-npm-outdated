@@ -28,7 +28,7 @@ else
 fi
 
 if [ -z "$INPUT_DEPENDENCY" ]; then
-    >&2 echo "'dependency' must be provided"
+    echo "'dependency' must be provided"
     exit 1
 else
  # To-do - check input_dep or package as input.
@@ -39,16 +39,18 @@ if [ "$INPUT_SKIP_NPM_CI_EXECUTE" == "false" ]; then
   npm ci >>/dev/stderr
 fi
 
-OUTDATED=`npm outdated --json --all $PACKAGE`
+OUTDATED=$(npm outdated --json --all $PACKAGE)
 
 echo "Checking for updated versions of $PACKAGE on $PROJECT"
 
 if [ -z "$OUTDATED" ] || [ "$OUTDATED" = "{}" ]; then
-  echo "No new version found for $PACKAGE"
   echo "hasNewVersion=false" >> "$OUTPUT_TARGET"
+  echo $OUTDATED
   if [ "$INPUT_FAIL_ON_NO_NEW_VERSION" = "true" ]; then
+    echo "No new version found for $PACKAGE - ending with error."
     exit 1
   fi
+  echo "No new version found for $PACKAGE - ending normally."
   exit 0
 fi
 
