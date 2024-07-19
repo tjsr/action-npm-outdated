@@ -42,6 +42,7 @@ fi
 echo Operating from $PWD
 pwd
 echo Action has npm version $(npm --version)
+echo npm outdated --json $PACKAGE --verbose
 npm outdated --json $PACKAGE --verbose
 npm outdated --json $PACKAGE --verbose
 npm outdated --json $PACKAGE --verbose
