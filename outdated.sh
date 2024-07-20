@@ -39,18 +39,7 @@ if [ "$INPUT_SKIP_NPM_CI_EXECUTE" == "false" ]; then
   npm ci >>/dev/stderr
 fi
 
-echo Operating from $PWD
-pwd
-echo Action has npm version $(npm --version)
-echo npm outdated --json --all
-# npm outdated --json $PACKAGE --verbose
-# npm outdated --json $PACKAGE --verbose
-# npm outdated --json $PACKAGE --verbose
-# npm outdated --json $PACKAGE --verbose
-# npm outdated --json $PACKAGE --verbose
-# npm outdated --json $PACKAGE --verbose
-OUTDATED=$(npm outdated --all --json)
-echo $OUTDATED
+OUTDATED=$(npm outdated --json)
 
 echo "Checking for updated versions of $PACKAGE on $PROJECT"
 
@@ -68,13 +57,17 @@ PACKAGE_OUTDATED=$(echo "$OUTDATED" | jq -c -r --arg package "$PACKAGE" '
   .[$package] | if type == "array" then . else [.] end
 ')
 
+VERSION_DATA=$(echo $PACKAGE_OUTDATED | jq -c -r --arg project "$PROJECT" '
+  .[] | .hasNewVersion = (.current != .latest)
+')
+
 DEPENDENT_DATA=$(echo $PACKAGE_OUTDATED | jq -c -r --arg project "$PROJECT" '
   .[] | select(.dependent == $project) | .hasNewVersion = (.current != .latest)
 ')
 
-echo "$DEPENDENT_DATA" | jq -r 'to_entries[] | "\(.key)=\(.value)"' >> "$OUTPUT_TARGET"
-if [ "$(echo $DEPENDENT_DATA | jq -r .hasNewVersion)" != "true" ]; then
-  echo "No new version found for $PACKAGE"
+echo "$VERSION_DATA" | jq -r 'to_entries[] | "\(.key)=\(.value)"' >> "$OUTPUT_TARGET"
+if [ "$(echo $VERSION_DATA | jq -r .hasNewVersion)" != "true" ]; then
+  echo "No new version found for $PACKAGE (after parsing vailable nodes)"
   echo $OUTDATED
   echo "hasNewVersion=false" >> "$OUTPUT_TARGET"
   if [ "$INPUT_FAIL_ON_NO_NEW_VERSION" = "true" ]; then
@@ -83,4 +76,4 @@ if [ "$(echo $DEPENDENT_DATA | jq -r .hasNewVersion)" != "true" ]; then
   exit 0
 fi
 
-echo "Package $PACKAGE@$(echo $DEPENDENT_DATA | jq -r .current) wants $(echo $DEPENDENT_DATA | jq -r .wanted) with $(echo $DEPENDENT_DATA | jq -r .latest) latest available."
+echo "Package $PACKAGE@$(echo $VERSION_DATA | jq -r .current) wants $(echo $VERSION_DATA | jq -r .wanted) with $(echo $VERSION_DATA | jq -r .latest) latest available."
