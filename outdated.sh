@@ -5,6 +5,8 @@ NPM_VERSION=$(npm --version)
 if [ "$NPM_VERSION" != "10.8.1" ] && [ "$NPM_VERSION" != "10.8.2"]; then
   echo "npm version $NPM_VERSION is not supported - must use 10.8.1 or 10.8.2"
   exit 1
+else
+  echo "npm version $NPM_VERSION is supported"
 fi
 
 if [ ! -z "$INPUT_PROJECT_PATH" ]; then
