@@ -17,6 +17,9 @@ jobs:
       with:
         node-version: 20.15.1
 
+    - name: Install npm 10.8.2
+      run: npm install -g npm@10.8.2
+
     - name: Run npn-action-outdated from local source action
       uses: ./
       id: test-outdated-rimraf
