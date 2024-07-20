@@ -16,9 +16,9 @@ jobs:
     - uses: actions/setup-node@v4
       with:
         node-version: 20.15.1
-        registry-url: 'https://npm.pkg.github.com'
-        # Defaults to the user or organization that owns the workflow file
-        scope: '@tjsr'
+
+    - name: Install npm 10.8.2
+      run: npm install -g npm@10.8.2
 
     - name: Run npn-action-outdated from local source action
       uses: ./
