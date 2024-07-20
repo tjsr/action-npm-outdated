@@ -1,6 +1,12 @@
 #!/bin/bash
 set +e
 
+NPM_VERSION=$(npm --version)
+if [ "$NPM_VERSION" != "10.8.1" ] && [ "$NPM_VERSION" != "10.8.2"]; then
+  echo "npm version $NPM_VERSION is not supported - must use 10.8.1 or 10.8.2"
+  exit 1
+fi
+
 if [ ! -z "$INPUT_PROJECT_PATH" ]; then
   echo "Switching in to $INPUT_PROJECT_PATH to run outdated commands"
   cd $INPUT_PROJECT_PATH
@@ -67,9 +73,9 @@ DEPENDENT_DATA=$(echo $PACKAGE_OUTDATED | jq -c -r --arg project "$PROJECT" '
   .[] | select(.dependent == $project) | .hasNewVersion = (.current != .latest)
 ')
 
-echo "$VERSION_DATA" | jq -r 'to_entries[] | "\(.key)=\(.value)"' >> "$OUTPUT_TARGET"
-if [ "$(echo $VERSION_DATA | jq -r .hasNewVersion)" != "true" ]; then
-  echo "No new version found for $PACKAGE (after parsing vailable nodes)"
+echo "$DEPENDENT_DATA" | jq -r 'to_entries[] | "\(.key)=\(.value)"' >> "$OUTPUT_TARGET"
+if [ "$(echo $DEPENDENT_DATA | jq -r .hasNewVersion)" != "true" ]; then
+  echo "No new version found for $PACKAGE"
   echo $OUTDATED
   echo "hasNewVersion=false" >> "$OUTPUT_TARGET"
   if [ "$INPUT_FAIL_ON_NO_NEW_VERSION" = "true" ]; then
@@ -78,4 +84,4 @@ if [ "$(echo $VERSION_DATA | jq -r .hasNewVersion)" != "true" ]; then
   exit 0
 fi
 
-echo "Package $PACKAGE@$(echo $VERSION_DATA | jq -r .current) wants $(echo $VERSION_DATA | jq -r .wanted) with $(echo $VERSION_DATA | jq -r .latest) latest available."
+echo "Package $PACKAGE@$(echo $DEPENDENT_DATA | jq -r .current) wants $(echo $DEPENDENT_DATA | jq -r .wanted) with $(echo $DEPENDENT_DATA | jq -r .latest) latest available."
