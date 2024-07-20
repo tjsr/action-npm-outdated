@@ -75,7 +75,7 @@ DEPENDENT_DATA=$(echo $PACKAGE_OUTDATED | jq -c -r --arg project "$PROJECT" '
   .[] | select(.dependent == $project) | .hasNewVersion = (.current != .latest)
 ')
 
-OUTPUT=$(echo $DEPENDENT_DATA | jq -r 'to_entries[] | "\(.key)=\(.value)"')
+OUTPUT=$(echo $DEPENDENT_DATA | jq -r 'to_entries[] | "\(.key)=\(.value)\n"')
 echo $OUTPUT >> "$OUTPUT_TARGET"
 if [ "$(echo $DEPENDENT_DATA | jq -r .hasNewVersion)" != "true" ]; then
   echo "No new version found for $PACKAGE"
