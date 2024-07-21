@@ -65,15 +65,28 @@ PACKAGE_OUTDATED=$(echo "$OUTDATED" | jq -c -r --arg package "$PACKAGE" '
   .[$package] | if type == "array" then . else [.] end
 ')
 
-VERSION_DATA=$(echo $PACKAGE_OUTDATED | jq -c -r '
-  .[] | .hasNewVersion = (.current != .latest)
-')
+if [ "$INPUT_USE_LATEST" = "true" ]; then
+  VERSION_DATA=$(echo $PACKAGE_OUTDATED | jq -c -r '
+    .[] | .hasNewVersion = (.current != .latest)
+  ')
+else
+  VERSION_DATA=$(echo $PACKAGE_OUTDATED | jq -c -r '
+    .[] | .hasNewVersion = (.current != .wanted)
+  ')
+fi
+
 
 echo Version data for all dependents on $PACKAGE: $VERSION_DATA
 
-DEPENDENT_DATA=$(echo $PACKAGE_OUTDATED | jq -c -r --arg project "$PROJECT" '
-  .[] | select(.dependent == $project) | .hasNewVersion = (.current != .latest)
-')
+if [ "$INPUT_USE_LATEST" = "true" ]; then
+  DEPENDENT_DATA=$(echo $PACKAGE_OUTDATED | jq -c -r --arg project "$PROJECT" '
+    .[] | select(.dependent == $project) | .hasNewVersion = (.current != .latest)
+  ')
+else
+  DEPENDENT_DATA=$(echo $PACKAGE_OUTDATED | jq -c -r --arg project "$PROJECT" '
+    .[] | select(.dependent == $project) | .hasNewVersion = (.current != .wanted)
+  ')
+fi
 
 VALUES=($(echo $DEPENDENT_DATA | jq -r 'to_entries[] | "\(.key)=\(.value)"'))
 
