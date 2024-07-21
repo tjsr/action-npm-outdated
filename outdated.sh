@@ -92,7 +92,7 @@ VALUES=($(echo $DEPENDENT_DATA | jq -r 'to_entries[] | "\(.key)=\(.value)"'))
 
 echo $OUTPUT >> "$OUTPUT_TARGET"
 if [ "$(echo $DEPENDENT_DATA | jq -r .hasNewVersion)" != "true" ]; then
-  echo "No new version found for $PACKAGE"
+  echo "No new version found for $PACKAGE after reading $PROJECT's package.json"
   echo "hasNewVersion=false" >> "$OUTPUT_TARGET"
   if [ "$INPUT_FAIL_ON_NO_NEW_VERSION" = "true" ]; then
     exit 1
