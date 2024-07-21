@@ -69,7 +69,7 @@ VERSION_DATA=$(echo $PACKAGE_OUTDATED | jq -c -r '
   .[] | .hasNewVersion = (.current != .latest)
 ')
 
-echo Version data for all dependets: $VERSION_DATA
+echo Version data for all dependents on $PACKAGE: $VERSION_DATA
 
 DEPENDENT_DATA=$(echo $PACKAGE_OUTDATED | jq -c -r --arg project "$PROJECT" '
   .[] | select(.dependent == $project) | .hasNewVersion = (.current != .latest)
