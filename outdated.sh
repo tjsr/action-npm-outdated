@@ -1,9 +1,12 @@
 #!/bin/bash
+
 set +e
 
 NPM_VERSION=$(npm --version)
-if [ "$NPM_VERSION" != "10.8.1" ] && [ "$NPM_VERSION" != "10.8.2" ]; then
-  echo "npm version $NPM_VERSION is not supported - must use 10.8.1 or 10.8.2"
+npx -y semver -r ">=10.8.1" "$NPM_VERSION"
+
+if [ "$?" != "0" ]; then
+  echo "npm version $NPM_VERSION is not supported - must use >=10.8.1"
   exit 1
 else
   echo "npm version $NPM_VERSION is supported"
@@ -87,11 +90,12 @@ else
     .[] | select(.dependent == $project) | .hasNewVersion = (.current != .wanted)
   ')
 fi
+HAS_NEW_VERSION=$(echo $DEPENDENT_DATA | jq -r .hasNewVersion)
 
 VALUES=($(echo $DEPENDENT_DATA | jq -r 'to_entries[] | "\(.key)=\(.value)"'))
 
 echo $OUTPUT >> "$OUTPUT_TARGET"
-if [ "$(echo $DEPENDENT_DATA | jq -r .hasNewVersion)" != "true" ]; then
+if [ "$HAS_NEW_VERSION" != "true" ]; then
   echo "No new version found for $PACKAGE after reading $PROJECT's package.json"
   echo "hasNewVersion=false" >> "$OUTPUT_TARGET"
   if [ "$INPUT_FAIL_ON_NO_NEW_VERSION" = "true" ]; then
