@@ -3,7 +3,7 @@
 set +e
 
 NPM_VERSION=$(npm --version)
-npx -y semver -r ">=10.8.1" "$NPM_VERSION"$(npm --version)"
+npx -y semver -r ">=10.8.1" "$NPM_VERSION"
 
 if [ "$?" != "0" ]; then
   echo "npm version $NPM_VERSION is not supported - must use >=10.8.1"
