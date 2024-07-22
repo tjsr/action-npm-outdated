@@ -14,7 +14,7 @@ While none of these steps rely on this github action, this GHA would be the firs
 
 ## Requirements
 
-This action requires npm v10.8.1 or v10.8.2, as the JSON report format it reads and parses is different in 10.8.0 and before.  At the time of writing it checks these exact versions - a later update will be required when 10.9.x is released.
+This action requires npm v10.8.1 or higher, as the JSON report format it reads and parses is different in 10.8.0 and before.
 
 ## Usage
 
@@ -37,7 +37,7 @@ eg,
     registry-url: 'https://npm.pkg.github.com'
 
 - name: Install npm 10.8.2
-  run: npm install -g npm@10.8.2
+  run: npm install -g npm@10.8.2 semver
 
 - name: Cache node modules
   id: cache-npm
@@ -111,5 +111,4 @@ If you wanted to update multiple dependencies in a single action, you could pote
 
 ## To-Do items
 
-1. Add ability to only updated to 'wanted' rather than 'latest' version.
-2. Output results as a JSON object array to enable checking multiple dependencies in a single call.
+1. Output results as a JSON object array to enable checking multiple dependencies in a single call.
