@@ -3,6 +3,10 @@ run-name: ${{ github.actor }} Running action_npm_outdated test.
 on: [push, workflow_dispatch] 
 jobs:
   test-action:
+    strategy:
+      fail-fast: false
+      matrix:
+        node-version: [22, 24, 26]
     runs-on: ubuntu-latest
     env:
       DOCKER_BUILDKIT: 1
@@ -15,7 +19,7 @@ jobs:
     # Setup .npmrc file to publish to GitHub Packages
     - uses: actions/setup-node@v4
       with:
-        node-version: 20.15.1
+        node-version: ${{ matrix.node-version }}
 
     - name: Install npm 10.8.2
       run: npm install -g npm@10.8.2
